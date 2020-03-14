@@ -22,7 +22,6 @@ file_names = [os.path.splitext(file)[0] for file in os.listdir(icon_path) if fil
 file_names = sorted(file_names, key=str.lower) 
 
 # scss file template.
-
 scss_file_template = """// This an auto generated file, do not modify!
 @if variable-exists(include) {{
   @each $country in $include {{
