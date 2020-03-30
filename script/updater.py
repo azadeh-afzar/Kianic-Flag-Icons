@@ -13,7 +13,7 @@ icon_path = os.path.join(kiaflagcons_path, "icons", "4x3")
 scss_file_path = os.path.join(kiaflagcons_path, "sass", "list.scss")
 
 # download latest simple icon release.
-process =subprocess.run(["./downloader.sh"], stdout=subprocess.PIPE)
+process = subprocess.run(["./downloader.sh"], stdout=subprocess.PIPE)
 
 # list name of all the icon svg files.
 file_names = [os.path.splitext(file)[0] for file in os.listdir(icon_path) if file.lower().endswith(".svg")]
