@@ -8,7 +8,7 @@ import subprocess
 # configure path variables.
 file_path = os.path.abspath(os.path.dirname(__file__))
 base_path = os.path.abspath(os.path.dirname(file_path))
-downloader_script = os.path.join(base_path, "downloader.sh")
+downloader_script = os.path.join(file_path, "downloader.sh")
 kiaflagcons_path = os.path.join(base_path, "kiaflagcons")
 icon_path = os.path.join(kiaflagcons_path, "icons", "4x3")
 scss_file_path = os.path.join(kiaflagcons_path, "sass", "list.scss")
