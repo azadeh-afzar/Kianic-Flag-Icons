@@ -8,12 +8,13 @@ import subprocess
 # configure path variables.
 file_path = os.path.abspath(os.path.dirname(__file__))
 base_path = os.path.abspath(os.path.dirname(file_path))
+downloader_script = os.path.join(base_path, "downloader.sh")
 kiaflagcons_path = os.path.join(base_path, "kiaflagcons")
 icon_path = os.path.join(kiaflagcons_path, "icons", "4x3")
 scss_file_path = os.path.join(kiaflagcons_path, "sass", "list.scss")
 
 # download latest simple icon release.
-process = subprocess.run(["./downloader.sh"], stdout=subprocess.PIPE)
+process = subprocess.run([downloader_script], stdout=subprocess.PIPE)
 
 # list name of all the icon svg files.
 file_names = [os.path.splitext(file)[0] for file in os.listdir(icon_path) if file.lower().endswith(".svg")]
