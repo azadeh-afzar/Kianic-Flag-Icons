@@ -1,38 +1,46 @@
 #!/usr/bin/env bash
 
-CURRDIR="$PWD"
+CURRDIR="${PWD}"
 ICONDIR="${PWD%/*}/kiaflagcons/icons"
-ICON_TARGZ="kiaflagcons.tar.gz"
 TEMPDIR="temp"
-TEMPICON_4x3="$( echo "$TEMPDIR/"*"/flags/4x3" )"
-TEMPICON_1x1="$( echo "$TEMPDIR/"*"/flags/1x1" )"
 
 # Create temporary directory.
-mkdir -p $TEMPDIR
+mkdir --parents "${TEMPDIR}"
 
 # Reset current icon directories.
-rm -rf "$ICONDIR"
-mkdir -p "$ICONDIR"
-mkdir -p "$ICONDIR/4x3"
-mkdir -p "$ICONDIR/1x1"
+rm --force --recursive "${ICONDIR}"
+mkdir --parents "${ICONDIR}"
+mkdir --parents "${ICONDIR}/4x3"
+mkdir --parents "${ICONDIR}/1x1"
 
 # Create download link.
-LOCATION=$(curl -s https://api.github.com/repos/lipis/flag-icon-css/releases/latest \
+FIC_VERSION=$(curl --silent https://api.github.com/repos/lipis/flag-icon-css/releases/latest \
 | grep "tag_name" \
-| awk '{print "https://github.com/lipis/flag-icon-css/archive/" substr($2, 2, length($2)-3) ".tar.gz"}') \
+| awk '{print "" substr($2, 2, length($2)-3)}')
+
+FIC_DOWNLOAD_LINK="https://github.com/lipis/flag-icon-css/archive/${FIC_VERSION}.tar.gz"
+
+# Setup paths.
+FIC_TARGZ="kiaflagcons.tar.gz"
+TEMPICON_4x3="./${TEMPDIR}/flag-icon-css-${FIC_VERSION}/flags/4x3"
+TEMPICON_1x1="./${TEMPDIR}/flag-icon-css-${FIC_VERSION}/flags/1x1"
 
 # Download.
-curl -L "$LOCATION" > "$ICON_TARGZ"
+wget --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 \
+--tries 0 --no-dns-cache --output-document "${FIC_TARGZ}" "${FIC_DOWNLOAD_LINK}"
 
-# Extract
-tar -xz --file "$ICON_TARGZ" --directory "./$TEMPDIR"
+tar --extract --gzip --file "${FIC_TARGZ}" --directory "./${TEMPDIR}"
 
 # Delete downloaded tar.gz
-rm "$ICON_TARGZ"
+rm "${FIC_TARGZ}"
+
+# Remove current icons.
+rm --force --recursive "${ICONDIR}/4x3"
+rm --force --recursive "${ICONDIR}/1x1"
 
 # Move files from temporary directory to main directory.
-mv $TEMPICON_4x3/* "$ICONDIR/4x3"
-mv $TEMPICON_1x1/* "$ICONDIR/1x1"
+mv "${TEMPICON_4x3}" "${ICONDIR}"
+mv "${TEMPICON_1x1}" "${ICONDIR}"
 
 # Delete temporary folder.
-rm -rf $TEMPDIR
+rm --force --recursive ./${TEMPDIR}
